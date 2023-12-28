@@ -23,6 +23,21 @@ parser.add_argument(
 parser.add_argument(
     "--quant", type=int, choices=[4, 8, 16], help="Number of quantization bits"
 )
+parser.add_argument(
+    "--query",
+    type=str,
+    default="Describe the image accurately and in detail, capturing descriptions of the image and any text.",
+    required=False,
+    help="Query to pass to the model for captioning, use default query otherwise (ex: Describe what you see in the image)",
+)
+parser.add_argument(
+    "--system",
+    type=str,
+    default="An image captioning chat between a USER and an ASSISTANT. USER: {} ASSISTANT:",
+    required=False,
+    help="Default prompt to pass to the model for captioning (ex: An image captioning chat between a USER and an ASSISTANT. USER: <--query> ASSISTANT:)",
+)
+
 
 # ex: THUDM/cogvlm-grounding-generalist-hf, THUDM/cogagent-vqa-hf, THUDM/cogagent-chat-hf, etc
 parser.add_argument(
@@ -102,9 +117,7 @@ else:
     )
 
 history = []
-text_only_template = (
-    "An image captioning chat between a USER and an ASSISTANT. USER: {} ASSISTANT:"
-)
+text_only_template = args.system
 
 # Preallocate the history list
 history = []
@@ -124,7 +137,7 @@ for filename in image_files:
     # Clear the history
     history.clear()
 
-    query = "Describe the image accurately and in detail, capturing descriptions of the image and any text."
+    query = args.query
 
     input_by_model = model.build_conversation_input_ids(
         tokenizer, query=query, history=history, images=[image]
