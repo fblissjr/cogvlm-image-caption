@@ -1,0 +1,7 @@
+# following cogvlm requirements from https://github.com/THUDM/CogVLM/blob/main/requirements.txt
+transformers>=4.36.1
+xformers>=0.0.22
+torch>=2.1.0
+torchvision>=0.16.2
+pillow>=10.0.1
+accelerate>=0.25.0
